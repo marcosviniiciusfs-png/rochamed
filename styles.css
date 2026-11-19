@@ -1,12 +1,13 @@
-:root{--brand:#00758f;--brand-dark:#005a6e;--ink:#222;--muted:#6b6b6b;--bg:#fff;--soft:#f1f1f1;--top:#222}
+:root{--brand:#9f319f;--brand-dark:#7a2479;--brand-deeper:#4a1749;--brand-light:#f6e8f6;--brand-soft:#fbf2fb;--ink:#222;--muted:#6b6b6b;--bg:#fff;--soft:#f1f1f1;--top:#5e1a5e}
 *{box-sizing:border-box}
 body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--ink);background:var(--bg)}
 a{color:inherit;text-decoration:none}
 button{font:inherit;cursor:pointer}
 .topbar{background:var(--top);color:#fff;text-align:center;padding:14px 16px;font-size:14px}
 .header{display:flex;align-items:center;gap:32px;padding:16px 48px;flex-wrap:wrap}
-.logo{display:flex;align-items:center;gap:8px;font-size:30px;font-weight:800;color:var(--brand);font-style:italic}
-.logo-mark{display:grid;place-items:center;width:38px;height:38px;background:#2fb36d;color:#fff;border-radius:10px;font-style:normal;font-size:24px}
+.logo{display:flex;align-items:baseline;font-family:"Nunito","Trebuchet MS",Arial,sans-serif;font-size:38px;font-weight:900;letter-spacing:-.02em;line-height:1}
+.logo .rocha{color:var(--brand)}
+.logo .med{color:#f2b705}
 .search{flex:1;min-width:240px;display:flex;background:var(--soft);border-radius:30px;padding:0 14px}
 .search input{flex:1;border:0;background:transparent;padding:14px 8px;font-size:17px;outline:none}
 .search button{border:0;background:none;font-size:18px}
@@ -19,13 +20,13 @@ button{font:inherit;cursor:pointer}
 main{padding:0 48px 40px}
 .shortcuts{list-style:none;display:grid;grid-template-columns:repeat(8,1fr);gap:24px;padding:0;margin:24px 0}
 .shortcuts a{display:flex;flex-direction:column;align-items:center;gap:10px;font-size:14px;font-weight:600;text-align:center}
-.shortcuts span{display:grid;place-items:center;width:100%;max-width:120px;height:70px;background:#2e2e2e;border-radius:16px;font-size:28px;color:#6fd39a}
+.shortcuts span{display:grid;place-items:center;width:100%;max-width:120px;height:70px;background:var(--brand-dark);border-radius:16px;font-size:28px;color:#f3d6f3}
 .hero{position:relative;overflow:hidden;border-radius:28px;border:6px solid #111}
 .slides{display:flex;transition:transform .5s}
 .slide{min-width:100%;min-height:340px;display:flex;align-items:center;padding:40px 64px;color:#fff}
-.s1{background:linear-gradient(110deg,#111 0 45%,#3fa36a 45%)}
-.s2{background:linear-gradient(110deg,#00758f,#2fb36d)}
-.s3{background:linear-gradient(110deg,#222,#00758f)}
+.s1{background:linear-gradient(110deg,var(--brand-deeper) 0 45%,var(--brand) 45%)}
+.s2{background:linear-gradient(110deg,var(--brand-dark),var(--brand))}
+.s3{background:linear-gradient(110deg,var(--brand-deeper),var(--brand-dark))}
 .slide h2{font-size:42px;margin:6px 0 10px;max-width:520px;font-style:italic}
 .slide p{font-size:22px;margin:0 0 18px}.slide small{opacity:.85;font-size:15px}
 .btn{display:inline-block;background:#111;color:#fff;padding:12px 34px;border-radius:12px;font-weight:700}
@@ -39,7 +40,7 @@ main{padding:0 48px 40px}
 .shelf h2{font-size:26px;margin:32px 0 16px}
 .cards{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(200px,1fr);gap:16px;overflow-x:auto;padding-bottom:8px}
 .card{border:1px solid #e3e3e3;border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:8px}
-.card .img{height:140px;border-radius:10px;background:linear-gradient(135deg,#e6f4f7,#e9f8ef);display:grid;place-items:center;font-size:44px}
+.card .img{height:140px;border-radius:10px;background:linear-gradient(135deg,var(--brand-light),var(--brand-soft));display:grid;place-items:center;font-size:44px}
 .card h3{font-size:14px;font-weight:500;margin:0;min-height:54px;line-height:1.3}
 .card .old{font-size:13px;color:var(--muted);text-decoration:line-through}
 .card .price{font-size:20px;font-weight:800}
