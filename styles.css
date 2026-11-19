@@ -5,8 +5,9 @@ a{color:inherit;text-decoration:none}
 button{font:inherit;cursor:pointer}
 .topbar{background:var(--top);color:#fff;text-align:center;padding:14px 16px;font-size:14px}
 .header{display:flex;align-items:center;gap:32px;padding:16px 48px;flex-wrap:wrap}
-.logo{display:flex;align-items:baseline;font-family:"Nunito","Trebuchet MS",Arial,sans-serif;font-size:38px;font-weight:900;letter-spacing:-.02em;line-height:1}
+.logo{display:flex;align-items:baseline;font-family:"Poppins",Arial,sans-serif;font-size:38px;font-weight:800;letter-spacing:-.02em;line-height:1}
 .logo .rocha{color:var(--brand)}
+.logo .heart-m{width:.95em;height:.78em;margin:0 .02em;overflow:visible}
 .logo .med{color:#f2b705}
 .search{flex:1;min-width:240px;display:flex;background:var(--soft);border-radius:30px;padding:0 14px}
 .search input{flex:1;border:0;background:transparent;padding:14px 8px;font-size:17px;outline:none}
