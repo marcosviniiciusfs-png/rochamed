@@ -73,13 +73,14 @@ function productImage(slug){
 }
 
 const shelvesEl = document.getElementById("shelves");
-PRODUCTS.forEach(group => {
+PRODUCTS.forEach((group, gi) => {
   const section = document.createElement("section");
   section.className = "shelf";
   const title = document.createElement("h2");
   title.textContent = group.sec;
   const cards = document.createElement("div");
-  cards.className = "cards";
+  // A primeira seção (Perfumaria importada) mantém o próprio ajuste de largura.
+  cards.className = gi === 0 ? "cards stretch" : "cards";
   section.append(title, cards);
 
   group.items.forEach(([name, slug, old, price, note]) => {
