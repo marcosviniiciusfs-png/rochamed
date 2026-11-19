@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rochamed - Farmácia online com entrega</title>
+<meta name="description" content="Rochamed: medicamentos, higiene, beleza e saúde com entrega rápida.">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="topbar"><span>Frete grátis nas compras acima de R$150</span></div>
+
+<header class="header">
+  <a class="logo" href="#" aria-label="Rochamed - página inicial"><span class="logo-mark">✚</span>Rochamed</a>
+  <form class="search" role="search" onsubmit="return false">
+    <input type="search" placeholder="Buscar na Rochamed" aria-label="Buscar">
+    <button aria-label="Buscar">🔍</button>
+  </form>
+  <nav class="actions" aria-label="Ações">
+    <button><span class="ic">📄</span><span>Compra rápida<br><b>com receita</b></span></button>
+    <button><span class="ic">👤</span><span>Boas-vindas!<br><b>Entrar ou cadastrar</b></span></button>
+    <button><span class="ic">📦</span><span>Acompanhar<br><b>pedidos</b></span></button>
+    <button><span class="ic">🧺</span><span>Cesta<br><b id="cart-total">R$ 0,00</b></span></button>
+  </nav>
+</header>
+
+<nav class="menu" aria-label="Menu principal">
+  <a class="cep" href="#">📍 <u>Insira seu CEP</u></a>
+  <a href="#"><b>☰ Todas as categorias</b></a>
+  <a href="#">Farmácias</a>
+  <a href="#">Blog</a>
+  <a href="#">Serviços de saúde</a>
+  <a href="#">Descontos e benefícios</a>
+  <a href="#">Lojas parceiras</a>
+  <a href="#">Baixe o app</a>
+  <a class="pill" href="#">Exibir descontos</a>
+</nav>
+
+<main>
+  <ul class="shortcuts">
+    <li><a href="#"><span>⭐</span>Mais Buscados</a></li>
+    <li><a href="#"><span>♡</span>Produtos salvos</a></li>
+    <li><a href="#"><span>💉</span>Serviços e Vacinas</a></li>
+    <li><a href="#"><span>🏷️</span>Suas ofertas</a></li>
+    <li><a href="#"><span>💊</span>Dose Certa</a></li>
+    <li><a href="#"><span>🎟️</span>Cupons</a></li>
+    <li><a href="#"><span>🧴</span>Perfumes</a></li>
+    <li><a href="#"><span>❄️</span>Cuidados no Inverno</a></li>
+  </ul>
+
+  <section class="hero" aria-label="Destaques">
+    <div class="slides" id="slides">
+      <article class="slide s1"><div><small>Semana de ofertas</small><h2>Clique agora e aproveite os melhores descontos</h2><p>com até <b>70%</b> de desconto</p><a class="btn" href="#">Confira</a></div></article>
+      <article class="slide s2"><div><small>Cuidados que você merece</small><h2>Dermocosméticos em oferta</h2><p>Cuide da pele todos os dias</p><a class="btn" href="#">Conhecer</a></div></article>
+      <article class="slide s3"><div><small>Seu tratamento</small><h2>Medicamentos com desconto</h2><p>Retire na farmácia em até 30 min, grátis</p><a class="btn" href="#">Conferir cupons</a></div></article>
+    </div>
+    <div class="dots" id="dots"></div>
+  </section>
+
+  <ul class="benefits">
+    <li>🎁 Ganhe pontos em suas compras</li>
+    <li>🏬 Retire na farmácia em até 30min, grátis!</li>
+    <li>💊 Descontos e benefícios em medicamentos</li>
+    <li>🧪 Exames, testes, vacinas e muito mais</li>
+  </ul>
+
+  <section class="tags" aria-label="Buscas populares">
+    <a href="#">Desodorante</a><a href="#">Fralda</a><a href="#">Absorvente</a><a href="#">Shampoo</a>
+    <a href="#">Sabonete</a><a href="#">Protetor solar</a><a href="#">Hidratante</a><a href="#">Escova de dente</a>
+    <a href="#">Fio dental</a><a href="#">Creatina</a><a href="#">Lenço umedecido</a><a href="#">Esmalte</a>
+  </section>
+
+  <section class="shelf"><h2>Mais comprados</h2><div class="cards" data-shelf="0"></div></section>
+  <section class="shelf"><h2>Mais vistos</h2><div class="cards" data-shelf="1"></div></section>
+  <section class="shelf"><h2>Cuidados que você merece</h2><div class="cards" data-shelf="2"></div></section>
+</main>
+
+<footer class="footer">
+  <div class="cols">
+    <div><h3>Institucional</h3><a href="#">Sobre nós</a><a href="#">Trabalhe conosco</a><a href="#">Nossas lojas</a></div>
+    <div><h3>Serviços</h3><a href="#">Vacinas</a><a href="#">Exames e testes</a><a href="#">Manipulação</a></div>
+    <div><h3>Perfil</h3><a href="#">Minha conta</a><a href="#">Meus pedidos</a><a href="#">Produtos salvos</a></div>
+    <div><h3>Atendimento</h3><a href="#">Central de ajuda</a><a href="#">Fale conosco</a><a href="#">Trocas e devoluções</a></div>
+    <div><h3>Segurança e privacidade</h3><a href="#">Política de privacidade</a><a href="#">Termos de uso</a></div>
+  </div>
+  <p class="legal">Projeto de demonstração de interface. Nenhuma venda real é realizada.</p>
+</footer>
+
+<div class="cookies" id="cookies" role="dialog" aria-label="Cookies">
+  <p>Durante sua navegação, podemos utilizar cookies para confirmar sua identidade, personalizar seu acesso e acompanhar a utilização do site. Veja a <a href="#">Política de Privacidade e Cookies</a>.</p>
+  <div><button class="ghost">Definições de cookies</button><button class="solid" data-close>Rejeitar todos os cookies</button><button class="solid" data-close>Aceitar todos os cookies</button></div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>

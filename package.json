@@ -1,0 +1,6 @@
+{
+  "name": "rochamed",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": { "dev": "npx http-server . -p 4180 -c-1" }
+}
