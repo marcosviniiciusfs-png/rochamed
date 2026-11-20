@@ -182,4 +182,13 @@ main{padding:0 max(48px,calc(50% - 825px)) 40px}
  .ban-offer p{display:none}
  .shelf h2{font-size:20px;font-weight:700;margin:28px 0 12px}
 }
+
+/* Celular: só os produtos, dois por linha, sem rolagem lateral */
+@media(max-width:600px){
+ .cards,.cards.stretch{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-flow:row;grid-auto-columns:auto;overflow:visible;gap:12px}
+ .card{height:auto;padding:10px}
+ .card .img{height:160px}
+ .card h3{min-height:40px;font-size:13px}
+ .card .price{font-size:17px}
+ .shelf h2{font-size:18px}
 }

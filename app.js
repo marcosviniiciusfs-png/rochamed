@@ -124,11 +124,5 @@ PRODUCTS.forEach((group, gi) => {
   shelvesEl.appendChild(section);
 });
 
-// Carrossel
-const slides = document.getElementById("slides"), dots = document.getElementById("dots"), n = slides.children.length;
-let i = 0, timer;
-for(let k=0;k<n;k++){const d=document.createElement("i");d.onclick=()=>go(k);dots.appendChild(d)}
-function go(k){i=(k+n)%n;const step=n>1?slides.children[1].offsetLeft-slides.children[0].offsetLeft:0;slides.style.transform=`translateX(-${i*step}px)`;[...dots.children].forEach((d,j)=>d.classList.toggle("on",j===i));clearInterval(timer);timer=setInterval(()=>go(i+1),5000)}
-go(0);
 // Cookies
 document.querySelectorAll("[data-close]").forEach(b=>b.onclick=()=>document.getElementById("cookies").remove());
