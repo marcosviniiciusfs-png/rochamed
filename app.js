@@ -124,5 +124,3 @@ PRODUCTS.forEach((group, gi) => {
   shelvesEl.appendChild(section);
 });
 
-// Cookies
-document.querySelectorAll("[data-close]").forEach(b=>b.onclick=()=>document.getElementById("cookies").remove());
