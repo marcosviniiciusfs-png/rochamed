@@ -92,7 +92,9 @@ function gravarCarrinho(){
 let cart = lerCarrinho();
 const itensCarrinho = () => Object.values(cart);
 const quantidadeTotal = () => itensCarrinho().reduce((s,i)=>s+i.qty,0);
-const valorTotal = () => itensCarrinho().reduce((s,i)=>s+i.price*i.qty,0);
+// Regra "compre 3": o preço por unidade só vale com 3 ou mais unidades; abaixo disso vale o preço original.
+const precoDoItem = i => (i.perUnit && i.qty < 3 ? (i.oldPrice ?? i.price) : i.price);
+const valorTotal = () => itensCarrinho().reduce((s,i)=>s+precoDoItem(i)*i.qty,0);
 
 function atualizarCesta(){
   const qtd = quantidadeTotal();
@@ -116,7 +118,7 @@ function adicionarAoCarrinho(p){
   const atual = cart[p.slug];
   cart[p.slug] = atual
     ? {...atual, qty: Math.min(atual.qty + 1, 99)}
-    : {slug:p.slug, name:p.name, price:p.price, perUnit:p.perUnit, qty:1};
+    : {slug:p.slug, name:p.name, price:p.price, oldPrice:p.old, perUnit:p.perUnit, qty:1};
   gravarCarrinho();
   atualizarCesta();
   mostrarAviso("✅ Item adicionado ao carrinho! Acesse a cesta 🧺 para finalizar a compra.");
@@ -179,8 +181,11 @@ function renderizarCesta(){
     remover.className = "rm";
     li.append(
       el("div", "n", item.name),
-      el("div", "sub", brl(item.price * item.qty)),
-      el("div", "p", `${brl(item.price)}${item.perUnit ? "/un." : ""} cada`),
+      el("div", "sub", brl(precoDoItem(item) * item.qty)),
+      el("div", "p", `${brl(precoDoItem(item))}${item.perUnit ? "/un." : ""} cada`),
+      item.perUnit && item.qty < 3
+        ? el("div", "hint", `Leve 3 e pague ${brl(item.price)}/un. (faltam ${3 - item.qty})`)
+        : el("div", "hint", ""),
       qtd,
       remover
     );
@@ -269,7 +274,7 @@ document.getElementById("checkout").addEventListener("submit", async ev => {
       body: JSON.stringify({
         nome,
         telefone,
-        itens: itensCarrinho().map(i => ({nome: i.name, quantidade: i.qty, preco: i.price}))
+        itens: itensCarrinho().map(i => ({nome: i.name, quantidade: i.qty, preco: precoDoItem(i)}))
       })
     });
     const dados = await resposta.json().catch(() => ({}));
@@ -330,7 +335,7 @@ PRODUCTS.forEach((group, gi) => {
 
     const btn = document.createElement("button");
     btn.textContent = "Adicionar";
-    btn.addEventListener("click", () => adicionarAoCarrinho({slug, name, price, perUnit}));
+    btn.addEventListener("click", () => adicionarAoCarrinho({slug, name, price, old, perUnit}));
 
     c.append(box, h3, oldEl, priceEl);
     if (perUnit) {

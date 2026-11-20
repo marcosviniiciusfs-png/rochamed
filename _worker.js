@@ -1,5 +1,6 @@
-// Pages Function: recebe o pedido da cesta, gera um código único e grava no D1 (binding DB).
-// Rota: /api/pedidos
+// Worker do Rochamed (modo avançado do Pages). Não é publicado como arquivo estático:
+// só trata /api/pedidos e entrega todo o resto ao site.
+// Recebe o pedido da cesta, gera um código único e grava no D1 (binding DB).
 
 const CORS = {
   "Access-Control-Allow-Origin": "*",
@@ -23,11 +24,7 @@ function gerarCodigo(){
   return `RM-${sufixo}`;
 }
 
-export async function onRequestOptions(){
-  return new Response(null, {status: 204, headers: CORS});
-}
-
-export async function onRequestPost({request, env}){
+async function criarPedido(request, env){
   let dados;
   try{ dados = await request.json(); }
   catch{ return json({erro: "Pedido inválido."}, 400); }
@@ -70,3 +67,18 @@ export async function onRequestPost({request, env}){
   }
   return json({erro: "Não foi possível gerar o código do pedido. Tente novamente."}, 500);
 }
+
+export default {
+  async fetch(request, env){
+    const url = new URL(request.url);
+    // Arquivos internos do projeto não são entregues ao navegador.
+    if (url.pathname === "/_worker.js" || url.pathname.startsWith("/functions/"))
+      return new Response("Não encontrado", {status: 404});
+    if (url.pathname === "/api/pedidos"){
+      if (request.method === "OPTIONS") return new Response(null, {status: 204, headers: CORS});
+      if (request.method !== "POST") return json({erro: "Método não permitido."}, 405);
+      return criarPedido(request, env);
+    }
+    return env.ASSETS.fetch(request);
+  },
+};
