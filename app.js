@@ -179,16 +179,19 @@ function renderizarCesta(){
     );
     const remover = botao("Remover", () => removerDoCarrinho(item.slug), `Remover ${item.name}`);
     remover.className = "rm";
+    const miniatura = document.createElement("span");
+    miniatura.className = "thumb";
+    miniatura.appendChild(productImage(item.slug));
     li.append(
+      miniatura,
       el("div", "n", item.name),
       el("div", "sub", brl(precoDoItem(item) * item.qty)),
       el("div", "p", `${brl(precoDoItem(item))}${item.perUnit ? "/un." : ""} cada`),
-      item.perUnit && item.qty < 3
-        ? el("div", "hint", `Leve 3 e pague ${brl(item.price)}/un. (faltam ${3 - item.qty})`)
-        : el("div", "hint", ""),
       qtd,
       remover
     );
+    if (item.perUnit && item.qty < 3)
+      li.appendChild(el("div", "hint", `Leve 3 e pague ${brl(item.price)}/un. (faltam ${3 - item.qty})`));
     lista.appendChild(li);
   }
 }
