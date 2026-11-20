@@ -1,0 +1,13 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "rochamed",
+  "pages_build_output_dir": ".",
+  "compatibility_date": "2026-11-18",
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "rochamed-demo",
+      "database_id": "cb9027d2-3c14-4ea5-b470-79b8b60e51ac"
+    }
+  ]
+}

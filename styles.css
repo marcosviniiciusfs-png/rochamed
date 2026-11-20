@@ -14,7 +14,7 @@ button{font:inherit;cursor:pointer}
 .search button{border:0;background:none;font-size:18px}
 .actions{display:flex;gap:28px}
 .actions button{display:flex;align-items:center;gap:10px;border:0;background:none;text-align:left;font-size:15px;line-height:1.2;color:var(--ink)}
-.actions b{font-weight:600}.ic{font-size:26px}
+.actions b{font-weight:600}.ic{font-size:26px;position:relative}
 .menu{display:flex;align-items:center;gap:34px;padding:10px max(48px,calc(50% - 825px)) 14px;font-size:16px;font-weight:400;color:#333;flex-wrap:wrap;background:#fff}
 .menu a{display:inline-flex;align-items:center;white-space:nowrap}
 .menu .cep,.menu .cats,.menu b{color:#222;font-weight:600}
@@ -195,3 +195,39 @@ main{padding:0 max(48px,calc(50% - 825px)) 40px}
  .card .price{font-size:17px}
  .shelf h2{font-size:18px}
 }
+
+/* Carrinho: contador no ícone, aviso, tela da cesta e formulário */
+[hidden]{display:none !important}
+.actions .ic .badge{display:grid;place-items:center;position:absolute;top:-8px;right:-10px;min-width:20px;height:20px;padding:0 5px;border-radius:10px;background:var(--brand);color:#fff;font-size:12px;font-weight:700;line-height:1;box-sizing:border-box}
+.toast{position:fixed;left:0;right:0;bottom:0;z-index:25;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px calc(14px + env(safe-area-inset-bottom));background:#111;color:#fff;font-size:15px;line-height:1.35;box-shadow:0 -6px 20px rgba(0,0,0,.25);transform:translateY(110%);transition:transform .3s}
+.toast.show{transform:translateY(0)}
+.toast button{flex:none;border:0;background:var(--brand);color:#fff;font-weight:700;padding:9px 14px;border-radius:10px}
+.sheet{position:fixed;inset:0;z-index:30;background:rgba(0,0,0,.55);display:flex;align-items:flex-end;justify-content:center}
+.sheet-box{background:#fff;width:100%;max-width:560px;max-height:92vh;overflow:auto;border-radius:18px 18px 0 0;padding:20px 20px calc(20px + env(safe-area-inset-bottom))}
+@media(min-width:700px){.sheet{align-items:center}.sheet-box{border-radius:18px}}
+.sheet-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.sheet-head h2{margin:0;font-size:22px}
+.x{border:0;background:none;font-size:30px;line-height:1;padding:0 4px;color:#333}
+.lines{list-style:none;margin:0;padding:0}
+.line{display:grid;grid-template-columns:1fr auto;gap:6px 12px;align-items:center;padding:12px 0;border-bottom:1px solid #eee}
+.line .n{font-weight:600;font-size:15px;line-height:1.3}
+.line .sub{font-weight:700;text-align:right}
+.line .p{font-size:13px;color:var(--muted)}
+.qty{display:inline-flex;align-items:center;gap:10px;border:1px solid #ccc;border-radius:10px;padding:2px 4px;justify-self:end}
+.qty button{border:0;background:none;font-size:18px;width:30px;height:30px;color:#222;padding:0}
+.line .rm{grid-column:1/-1;justify-self:start;border:0;background:none;color:var(--brand);font-size:13px;font-weight:600;padding:0}
+.empty{color:var(--muted);text-align:center;padding:24px 0}
+.sum{display:flex;justify-content:space-between;font-size:18px;margin:16px 0 4px}
+#checkout h3{font-size:16px;margin:18px 0 10px}
+.field{display:block;margin-bottom:10px}
+.field span{display:block;font-size:14px;margin-bottom:4px;font-weight:600}
+.field input{width:100%;padding:12px;font-size:16px;border:1px solid #bbb;border-radius:10px;font-family:inherit}
+.field input.invalid{border-color:#c00}
+.err{color:#c00;font-size:13px;margin:-4px 0 10px}
+.btn-primary{display:block;width:100%;text-align:center;border:0;background:var(--brand);color:#fff;border-radius:12px;padding:14px;font-weight:700;font-size:16px;margin-top:8px}
+.btn-primary:hover{background:var(--brand-dark)}
+.btn-primary:disabled{opacity:.6;cursor:default}
+.btn-ghost{display:block;width:100%;border:1px solid #ccc;background:#fff;border-radius:12px;padding:12px;font-weight:600;margin-top:10px}
+#done-view{text-align:center}
+.done-title{font-size:20px;font-weight:700}
+.code{font-size:26px;font-weight:800;letter-spacing:.06em;background:var(--brand-light);border-radius:12px;padding:12px;margin:8px 0 16px}

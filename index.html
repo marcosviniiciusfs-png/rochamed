@@ -20,7 +20,7 @@
     <button><span class="ic">📄</span><span>Compra rápida<br><b>com receita</b></span></button>
     <button><span class="ic">👤</span><span>Boas-vindas!<br><b>Entrar ou cadastrar</b></span></button>
     <button><span class="ic">📦</span><span>Acompanhar<br><b>pedidos</b></span></button>
-    <button><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10h18l-2 9H5z"/><path d="M8 10l4-6 4 6"/></svg></span><span>Cesta<br><b id="cart-total">R$ 0,00</b></span></button>
+    <button type="button" id="cart-btn"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10h18l-2 9H5z"/><path d="M8 10l4-6 4 6"/></svg><span class="badge" id="cart-count" hidden>0</span></span><span>Cesta<br><b id="cart-total">R$ 0,00</b></span></button>
   </nav>
   <button class="burger" aria-label="Menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
 </header>
@@ -50,6 +50,44 @@
   </div>
   <p class="legal">Projeto de demonstração de interface. Nenhuma venda real é realizada.</p>
 </footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite">
+  <span id="toast-msg"></span>
+  <button type="button" id="toast-go">Ver cesta</button>
+</div>
+
+<div class="sheet" id="cart-sheet" hidden>
+  <div class="sheet-box" role="dialog" aria-modal="true" aria-labelledby="cart-title">
+    <div class="sheet-head">
+      <h2 id="cart-title">Sua cesta</h2>
+      <button type="button" class="x" id="cart-close" aria-label="Fechar">×</button>
+    </div>
+    <div id="cart-view">
+      <ul class="lines" id="cart-lines"></ul>
+      <p class="empty" id="cart-empty" hidden>Sua cesta está vazia.</p>
+      <div class="sum"><span>Total</span><b id="sheet-total">R$ 0,00</b></div>
+      <form id="checkout" novalidate hidden>
+        <h3>Dados para finalizar</h3>
+        <label class="field"><span>Nome completo</span>
+          <input id="f-nome" name="nome" autocomplete="name" maxlength="120" required></label>
+        <p class="err" id="e-nome" hidden>Informe seu nome (mínimo de 3 letras).</p>
+        <label class="field"><span>Telefone com DDD</span>
+          <input id="f-tel" name="telefone" type="tel" inputmode="tel" autocomplete="tel" placeholder="(94) 99999-9999" maxlength="20" required></label>
+        <p class="err" id="e-tel" hidden>Informe um telefone válido com DDD.</p>
+        <p class="err" id="e-geral" hidden></p>
+        <button class="btn-primary" type="submit" id="send-btn">Enviar pedido</button>
+      </form>
+    </div>
+    <div id="done-view" hidden>
+      <p class="done-title">✅ Pedido recebido!</p>
+      <p>Seu código de pedido:</p>
+      <p class="code" id="done-code"></p>
+      <p>Toque no botão abaixo para enviar o pedido ao WhatsApp da loja e finalizar a compra.</p>
+      <a class="btn-primary" id="wa-link" target="_blank" rel="noopener">Enviar pelo WhatsApp</a>
+      <button type="button" class="btn-ghost" id="done-close">Fechar</button>
+    </div>
+  </div>
+</div>
 
 <script src="app.js"></script>
 </body>

@@ -51,7 +51,14 @@ const PRODUCTS = [
 ];
 
 const brl = n => n.toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
-let cart = 0;
+
+// ---- Configuração do pedido ----
+const WHATSAPP_NUMERO = "5594992144384";
+const CART_KEY = "rochamed-cart";
+// No GitHub Pages a API fica no domínio do Cloudflare Pages; no próprio Cloudflare usa o caminho relativo.
+const API_PEDIDOS = location.hostname.endsWith("github.io")
+  ? "https://rochamed.pages.dev/api/pedidos"
+  : "/api/pedidos";
 
 // Imagem do produto: tenta .jpg, .webp e .png; sem arquivo, mostra um ícone neutro.
 function productImage(slug){
@@ -72,6 +79,224 @@ function productImage(slug){
   return img;
 }
 
+// ---- Carrinho (fica guardado neste navegador) ----
+function lerCarrinho(){
+  try{
+    const obj = JSON.parse(localStorage.getItem(CART_KEY) || "{}");
+    return obj && typeof obj === "object" ? obj : {};
+  }catch{ return {}; }
+}
+function gravarCarrinho(){
+  try{ localStorage.setItem(CART_KEY, JSON.stringify(cart)); }catch{}
+}
+let cart = lerCarrinho();
+const itensCarrinho = () => Object.values(cart);
+const quantidadeTotal = () => itensCarrinho().reduce((s,i)=>s+i.qty,0);
+const valorTotal = () => itensCarrinho().reduce((s,i)=>s+i.price*i.qty,0);
+
+function atualizarCesta(){
+  const qtd = quantidadeTotal();
+  const badge = document.getElementById("cart-count");
+  badge.textContent = qtd;
+  badge.hidden = qtd === 0;
+  document.getElementById("cart-total").textContent = brl(valorTotal());
+  document.getElementById("cart-btn").setAttribute("aria-label", `Abrir cesta, ${qtd} ${qtd === 1 ? "item" : "itens"}`);
+}
+
+let avisoTimer;
+function mostrarAviso(texto){
+  const aviso = document.getElementById("toast");
+  document.getElementById("toast-msg").textContent = texto;
+  aviso.classList.add("show");
+  clearTimeout(avisoTimer);
+  avisoTimer = setTimeout(() => aviso.classList.remove("show"), 4500);
+}
+
+function adicionarAoCarrinho(p){
+  const atual = cart[p.slug];
+  cart[p.slug] = atual
+    ? {...atual, qty: Math.min(atual.qty + 1, 99)}
+    : {slug:p.slug, name:p.name, price:p.price, perUnit:p.perUnit, qty:1};
+  gravarCarrinho();
+  atualizarCesta();
+  mostrarAviso("✅ Item adicionado ao carrinho! Acesse a cesta 🧺 para finalizar a compra.");
+}
+
+// ---- Tela da cesta ----
+const sheet = document.getElementById("cart-sheet");
+
+function el(tag, cls, texto){
+  const e = document.createElement(tag);
+  if (cls) e.className = cls;
+  e.textContent = texto;
+  return e;
+}
+function botao(texto, aoClicar, rotulo){
+  const b = document.createElement("button");
+  b.type = "button";
+  b.textContent = texto;
+  b.setAttribute("aria-label", rotulo);
+  b.addEventListener("click", aoClicar);
+  return b;
+}
+
+function mudarQuantidade(slug, delta){
+  if (!cart[slug]) return;
+  const nova = cart[slug].qty + delta;
+  if (nova < 1) delete cart[slug];
+  else cart[slug].qty = Math.min(nova, 99);
+  gravarCarrinho();
+  atualizarCesta();
+  renderizarCesta();
+}
+function removerDoCarrinho(slug){
+  delete cart[slug];
+  gravarCarrinho();
+  atualizarCesta();
+  renderizarCesta();
+}
+
+function renderizarCesta(){
+  const lista = document.getElementById("cart-lines");
+  lista.replaceChildren();
+  const itens = itensCarrinho();
+  const vazia = itens.length === 0;
+  document.getElementById("cart-empty").hidden = !vazia;
+  document.getElementById("checkout").hidden = vazia;
+  document.getElementById("sheet-total").textContent = brl(valorTotal());
+
+  for (const item of itens){
+    const li = document.createElement("li");
+    li.className = "line";
+    const qtd = document.createElement("div");
+    qtd.className = "qty";
+    qtd.append(
+      botao("−", () => mudarQuantidade(item.slug, -1), `Diminuir ${item.name}`),
+      el("span", "", String(item.qty)),
+      botao("+", () => mudarQuantidade(item.slug, 1), `Aumentar ${item.name}`)
+    );
+    const remover = botao("Remover", () => removerDoCarrinho(item.slug), `Remover ${item.name}`);
+    remover.className = "rm";
+    li.append(
+      el("div", "n", item.name),
+      el("div", "sub", brl(item.price * item.qty)),
+      el("div", "p", `${brl(item.price)}${item.perUnit ? "/un." : ""} cada`),
+      qtd,
+      remover
+    );
+    lista.appendChild(li);
+  }
+}
+
+function mostrarPedidoFeito(feito, dados){
+  document.getElementById("cart-view").hidden = feito;
+  document.getElementById("done-view").hidden = !feito;
+  document.getElementById("cart-title").textContent = feito ? "Pedido enviado" : "Sua cesta";
+  if (feito){
+    document.getElementById("done-code").textContent = dados.codigo;
+    document.getElementById("wa-link").href =
+      `https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent(montarMensagem(dados))}`;
+  }
+}
+
+function abrirCesta(){
+  mostrarPedidoFeito(false);
+  renderizarCesta();
+  sheet.hidden = false;
+  document.body.style.overflow = "hidden";
+  const primeiro = itensCarrinho().length ? document.getElementById("f-nome") : document.getElementById("cart-close");
+  primeiro.focus();
+}
+function fecharCesta(){
+  sheet.hidden = true;
+  document.body.style.overflow = "";
+}
+
+// ---- Formulário e envio ----
+function formatarTelefone(d){
+  return d.length === 11
+    ? `(${d.slice(0,2)}) ${d.slice(2,7)}-${d.slice(7)}`
+    : `(${d.slice(0,2)}) ${d.slice(2,6)}-${d.slice(6)}`;
+}
+
+function montarMensagem(p){
+  const linhas = p.itens.map(i =>
+    `▪️ ${i.nome}\n     ${i.quantidade} x ${brl(i.preco)} = *${brl(i.preco * i.quantidade)}*`
+  );
+  return [
+    "🛒 *NOVO PEDIDO – ROCHAMED*",
+    "",
+    `🔖 *Código:* ${p.codigo}`,
+    `📅 *Data:* ${new Date(p.criado_em).toLocaleString("pt-BR")}`,
+    "",
+    "👤 *Cliente*",
+    `   Nome: ${p.nome}`,
+    `   📱 Telefone: ${formatarTelefone(p.telefone)}`,
+    "",
+    "📦 *Itens do pedido*",
+    ...linhas,
+    "",
+    `💰 *Total: ${brl(p.total)}*`,
+    "",
+    "✅ Pedido registrado. Aguardando confirmação."
+  ].join("\n");
+}
+
+const campoNome = document.getElementById("f-nome");
+const campoTel = document.getElementById("f-tel");
+
+document.getElementById("checkout").addEventListener("submit", async ev => {
+  ev.preventDefault();
+  const nome = campoNome.value.trim();
+  const telefone = campoTel.value.replace(/\D/g, "");
+  const nomeOk = nome.length >= 3;
+  const telOk = telefone.length === 10 || telefone.length === 11;
+  document.getElementById("e-nome").hidden = nomeOk;
+  document.getElementById("e-tel").hidden = telOk;
+  campoNome.classList.toggle("invalid", !nomeOk);
+  campoTel.classList.toggle("invalid", !telOk);
+  if (!nomeOk || !telOk) return;
+
+  const btn = document.getElementById("send-btn");
+  const erro = document.getElementById("e-geral");
+  btn.disabled = true;
+  btn.textContent = "Enviando…";
+  erro.hidden = true;
+  try{
+    const resposta = await fetch(API_PEDIDOS, {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({
+        nome,
+        telefone,
+        itens: itensCarrinho().map(i => ({nome: i.name, quantidade: i.qty, preco: i.price}))
+      })
+    });
+    const dados = await resposta.json().catch(() => ({}));
+    if (!resposta.ok) throw new Error(dados.erro || "Não foi possível enviar o pedido.");
+    cart = {};
+    gravarCarrinho();
+    atualizarCesta();
+    mostrarPedidoFeito(true, dados);
+  }catch(err){
+    erro.textContent = err instanceof TypeError
+      ? "Sem conexão com o servidor. Tente novamente."
+      : err.message;
+    erro.hidden = false;
+  }finally{
+    btn.disabled = false;
+    btn.textContent = "Enviar pedido";
+  }
+});
+
+document.getElementById("cart-btn").addEventListener("click", abrirCesta);
+document.getElementById("toast-go").addEventListener("click", abrirCesta);
+document.getElementById("cart-close").addEventListener("click", fecharCesta);
+document.getElementById("done-close").addEventListener("click", fecharCesta);
+sheet.addEventListener("click", ev => { if (ev.target === sheet) fecharCesta(); });
+document.addEventListener("keydown", ev => { if (ev.key === "Escape" && !sheet.hidden) fecharCesta(); });
+
+// ---- Vitrine ----
 const shelvesEl = document.getElementById("shelves");
 PRODUCTS.forEach((group, gi) => {
   const section = document.createElement("section");
@@ -105,10 +330,7 @@ PRODUCTS.forEach((group, gi) => {
 
     const btn = document.createElement("button");
     btn.textContent = "Adicionar";
-    btn.addEventListener("click", () => {
-      cart += price;
-      document.getElementById("cart-total").textContent = brl(cart);
-    });
+    btn.addEventListener("click", () => adicionarAoCarrinho({slug, name, price, perUnit}));
 
     c.append(box, h3, oldEl, priceEl);
     if (perUnit) {
@@ -124,3 +346,4 @@ PRODUCTS.forEach((group, gi) => {
   shelvesEl.appendChild(section);
 });
 
+atualizarCesta();
