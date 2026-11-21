@@ -115,15 +115,16 @@ function atualizarCesta(){
   badge.hidden = qtd === 0;
   document.getElementById("cart-total").textContent = brl(valorTotal());
   document.getElementById("cart-btn").setAttribute("aria-label", `Abrir cesta, ${qtd} ${qtd === 1 ? "item" : "itens"}`);
+  atualizarAviso();
 }
 
-let avisoTimer;
-function mostrarAviso(texto){
+// Aviso fixo na parte de baixo: aparece enquanto houver itens na sacola e leva até ela ao clicar.
+function atualizarAviso(){
+  const qtd = quantidadeTotal();
   const aviso = document.getElementById("toast");
-  document.getElementById("toast-msg").textContent = texto;
-  aviso.classList.add("show");
-  clearTimeout(avisoTimer);
-  avisoTimer = setTimeout(() => aviso.classList.remove("show"), 4500);
+  aviso.hidden = qtd === 0;
+  document.getElementById("toast-qtd").textContent = `${qtd} ${qtd === 1 ? "item" : "itens"}`;
+  document.body.classList.toggle("tem-sacola", qtd > 0);
 }
 
 function adicionarAoCarrinho(p){
@@ -133,7 +134,6 @@ function adicionarAoCarrinho(p){
     : {slug:p.slug, name:p.name, price:p.price, oldPrice:p.old, perUnit:p.perUnit, qty:1};
   gravarCarrinho();
   atualizarCesta();
-  mostrarAviso("✅ Item adicionado ao carrinho! Acesse a cesta 🧺 para finalizar a compra.");
 }
 
 // ---- Tela da cesta ----
@@ -341,7 +341,7 @@ document.getElementById("checkout").addEventListener("submit", async ev => {
 });
 
 document.getElementById("cart-btn").addEventListener("click", abrirCesta);
-document.getElementById("toast-go").addEventListener("click", abrirCesta);
+document.getElementById("toast").addEventListener("click", abrirCesta);
 document.getElementById("cart-close").addEventListener("click", fecharCesta);
 document.getElementById("done-close").addEventListener("click", fecharCesta);
 document.getElementById("copiar-msg").addEventListener("click", copiarMensagem);
