@@ -247,8 +247,8 @@ function abrirCesta(){
   renderizarCesta();
   sheet.hidden = false;
   document.body.style.overflow = "hidden";
-  const primeiro = itensCarrinho().length ? document.getElementById("f-nome") : document.getElementById("cart-close");
-  primeiro.focus();
+  // Foco no botão fechar (e não no campo do nome), para o teclado não abrir sozinho no celular.
+  document.getElementById("cart-close").focus({preventScroll: true});
 }
 function fecharCesta(){
   sheet.hidden = true;
