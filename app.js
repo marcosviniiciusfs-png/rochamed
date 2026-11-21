@@ -201,9 +201,14 @@ function mostrarPedidoFeito(feito, dados){
   document.getElementById("done-view").hidden = !feito;
   document.getElementById("cart-title").textContent = feito ? "Pedido enviado" : "Sua cesta";
   if (feito){
+    const enviadoPelaApi = dados.whatsapp_enviado === true;
     document.getElementById("done-code").textContent = dados.codigo;
-    document.getElementById("wa-link").href =
-      `https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent(montarMensagem(dados))}`;
+    document.getElementById("done-instrucao").textContent = enviadoPelaApi
+      ? "A loja já recebeu o seu pedido pelo WhatsApp. Aguarde o contato para finalizar a compra."
+      : "Toque no botão abaixo para enviar o pedido ao WhatsApp da loja e finalizar a compra.";
+    const linkWa = document.getElementById("wa-link");
+    linkWa.hidden = enviadoPelaApi;
+    linkWa.href = `https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent(montarMensagem(dados))}`;
   }
 }
 
