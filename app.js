@@ -17,7 +17,7 @@ const PRODUCTS = [
   {sec:"Ofertas especiais – compre 3 unidades", items:[
     ["MJ Natural","mj-natural",49.99,19.99,"compre3"],
     ["OZP Natural – 60 comprimidos","ozp-natural",49.99,19.99,"compre3"],
-    ["Vitasanus Body Slim – 60 cápsulas","vitasanus-body-slim",49.99,19.99,"compre3"]
+    ["Vitasanus Body Slim – 120 cápsulas","vitasanus-body-slim",49.99,19.99,"compre3"]
   ]},
   {sec:"Eudora Siàge – tratamento capilar", items:[
     ["Siàge Kit CCT 250 g + Ampola Pro Chronology","siage-kit-cct-chronology",165.46,133.99],
