@@ -311,10 +311,12 @@ const shelvesEl = document.getElementById("shelves");
 const atalhos = document.createElement("nav");
 atalhos.className = "jump";
 atalhos.setAttribute("aria-label", "Ir para uma seção de produtos");
+// Nomes curtos para caber em até 3 linhas no celular (mesma ordem de PRODUCTS).
+const ATALHOS_CURTOS = ["Perfumaria", "Beleza", "Ofertas compre 3", "Capilar Siàge", "Haskell", "Desodorantes", "Elseve", "La Roche-Posay"];
 PRODUCTS.forEach((group, gi) => {
   const link = document.createElement("a");
   link.href = `#secao-${gi}`;
-  link.textContent = group.sec;
+  link.textContent = ATALHOS_CURTOS[gi] ?? group.sec;
   atalhos.appendChild(link);
 });
 shelvesEl.appendChild(atalhos);
