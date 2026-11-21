@@ -94,6 +94,7 @@ main{padding:0 max(48px,calc(50% - 825px)) 40px}
 .cols{display:grid;grid-template-columns:repeat(5,1fr);gap:24px}
 .footer h3{font-size:16px;margin:0 0 10px}.footer a{display:block;color:#555;font-size:14px;margin:6px 0}
 .legal{margin:24px 0 0;color:var(--muted);font-size:13px}
+.footer .instagram{display:inline-block;font-size:16px;font-weight:700;color:var(--brand);text-align:center;width:100%}
 .cookies{position:fixed;left:0;right:0;bottom:0;background:#fff;box-shadow:0 -4px 20px rgba(0,0,0,.15);display:flex;gap:24px;align-items:center;justify-content:space-between;padding:20px 40px;z-index:9}
 .cookies p{margin:0;max-width:880px;font-size:15px;line-height:1.5}.cookies a{color:var(--brand);font-weight:700;text-decoration:underline}
 .cookies div{display:flex;gap:12px;flex-wrap:wrap}
