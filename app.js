@@ -196,19 +196,36 @@ function renderizarCesta(){
   }
 }
 
+let ultimaMensagem = "";
+
+// Copia o texto do pedido (com emojis) para colar direto no WhatsApp da loja.
+async function copiarMensagem(){
+  const botao = document.getElementById("copiar-msg");
+  try{
+    await navigator.clipboard.writeText(ultimaMensagem);
+  }catch{
+    const area = document.createElement("textarea");
+    area.value = ultimaMensagem;
+    document.body.appendChild(area);
+    area.select();
+    document.execCommand("copy");
+    area.remove();
+  }
+  botao.textContent = "Mensagem copiada!";
+  setTimeout(() => { botao.textContent = "Copiar mensagem"; }, 2500);
+}
+
 function mostrarPedidoFeito(feito, dados){
   document.getElementById("cart-view").hidden = feito;
   document.getElementById("done-view").hidden = !feito;
   document.getElementById("cart-title").textContent = feito ? "Pedido enviado" : "Sua cesta";
   if (feito){
-    const enviadoPelaApi = dados.whatsapp_enviado === true;
     document.getElementById("done-code").textContent = dados.codigo;
-    document.getElementById("done-instrucao").textContent = enviadoPelaApi
-      ? "A loja já recebeu o seu pedido pelo WhatsApp. Aguarde o contato para finalizar a compra."
-      : "Toque no botão abaixo para enviar o pedido ao WhatsApp da loja e finalizar a compra.";
-    const linkWa = document.getElementById("wa-link");
-    linkWa.hidden = enviadoPelaApi;
-    linkWa.href = `https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent(montarMensagem(dados))}`;
+    document.getElementById("done-instrucao").textContent =
+      "Toque no botão abaixo para enviar o pedido ao WhatsApp da loja e finalizar a compra.";
+    ultimaMensagem = montarMensagem(dados);
+    document.getElementById("wa-link").href =
+      `https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent(ultimaMensagem)}`;
   }
 }
 
@@ -313,6 +330,7 @@ document.getElementById("cart-btn").addEventListener("click", abrirCesta);
 document.getElementById("toast-go").addEventListener("click", abrirCesta);
 document.getElementById("cart-close").addEventListener("click", fecharCesta);
 document.getElementById("done-close").addEventListener("click", fecharCesta);
+document.getElementById("copiar-msg").addEventListener("click", copiarMensagem);
 sheet.addEventListener("click", ev => { if (ev.target === sheet) fecharCesta(); });
 document.addEventListener("keydown", ev => { if (ev.key === "Escape" && !sheet.hidden) fecharCesta(); });
 
