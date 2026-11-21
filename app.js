@@ -53,7 +53,17 @@ const PRODUCTS = [
 const brl = n => n.toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
 
 // ---- Configuração do pedido ----
-const WHATSAPP_NUMERO = "5594992144384";
+const WHATSAPP_NUMERO = "5594991044818";
+
+// Produtos liberados para compra agora; os demais aparecem bloqueados com aviso da live.
+const LIBERADOS = [
+  "mj-natural",                    // Mounjaro Natural
+  "ozp-natural",                   // Ozempic Natural
+  "al-absar-divine-sahra",         // Al Absar
+  "al-absar-divine-dahab",         // Al Absar
+  "eudora-mascara-nutri-acid",     // Máscara de tratamento
+  "haskell-mascara-cavalo-forte",  // Máscara de tratamento
+];
 const CART_KEY = "rochamed-cart";
 // No GitHub Pages a API fica no domínio do Cloudflare Pages; no próprio Cloudflare usa o caminho relativo.
 const API_PEDIDOS = location.hostname.endsWith("github.io")
@@ -83,7 +93,9 @@ function productImage(slug){
 function lerCarrinho(){
   try{
     const obj = JSON.parse(localStorage.getItem(CART_KEY) || "{}");
-    return obj && typeof obj === "object" ? obj : {};
+    if (!obj || typeof obj !== "object") return {};
+    // Remove itens que não estão mais liberados.
+    return Object.fromEntries(Object.entries(obj).filter(([slug]) => LIBERADOS.includes(slug)));
   }catch{ return {}; }
 }
 function gravarCarrinho(){
@@ -366,6 +378,7 @@ PRODUCTS.forEach((group, gi) => {
 
   group.items.forEach(([name, slug, old, price, note]) => {
     const perUnit = note === "compre3";
+    const liberado = LIBERADOS.includes(slug);
     const c = document.createElement("article");
     c.className = "card";
 
@@ -385,8 +398,13 @@ PRODUCTS.forEach((group, gi) => {
     priceEl.textContent = brl(price) + (perUnit ? "/un." : "");
 
     const btn = document.createElement("button");
-    btn.textContent = "Adicionar";
-    btn.addEventListener("click", () => adicionarAoCarrinho({slug, name, price, old, perUnit}));
+    if (liberado) {
+      btn.textContent = "Adicionar";
+      btn.addEventListener("click", () => adicionarAoCarrinho({slug, name, price, old, perUnit}));
+    } else {
+      btn.textContent = "Bloqueado";
+      btn.disabled = true;
+    }
 
     c.append(box, h3, oldEl, priceEl);
     if (perUnit) {
@@ -394,6 +412,12 @@ PRODUCTS.forEach((group, gi) => {
       tag.className = "note";
       tag.textContent = "Na compra de 3 unidades";
       c.appendChild(tag);
+    }
+    if (!liberado) {
+      const aviso = document.createElement("span");
+      aviso.className = "aviso-live";
+      aviso.textContent = "Disponível na live Black Friday dia 28/11";
+      c.appendChild(aviso);
     }
     c.appendChild(btn);
     cards.appendChild(c);
