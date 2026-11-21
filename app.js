@@ -249,14 +249,15 @@ function formatarTelefone(d){
     : `(${d.slice(0,2)}) ${d.slice(2,6)}-${d.slice(6)}`;
 }
 
-const NUMEROS = ["1️⃣","2️⃣","3️⃣","4️⃣","5️⃣","6️⃣","7️⃣","8️⃣","9️⃣","🔟"];
+// Só emojis que apareceram corretamente no WhatsApp da loja (🛒 ✨ 🔖 📅 👤 📱).
+// Os demais (números em emoji, 🔢 🏷️ 💰 ✅ ⏳ 🙌) saíam quebrados e foram trocados por texto.
 const LINHA = "━━━━━━━━━━━━━━━━━━";
 
 function montarMensagem(p){
   const itens = p.itens.map((i, n) =>
-    `${NUMEROS[n] ?? "🔹"} *${i.nome}*\n` +
-    `    🔢 Qtd: ${i.quantidade} × ${brl(i.preco)}\n` +
-    `    🏷️ Subtotal: *${brl(i.preco * i.quantidade)}*`
+    `${n + 1}. *${i.nome}*\n` +
+    `    Qtd: ${i.quantidade} × ${brl(i.preco)}\n` +
+    `    Subtotal: *${brl(i.preco * i.quantidade)}*`
   );
   return [
     "🛒✨ *NOVO PEDIDO – ROCHAMED* ✨🛒",
@@ -265,17 +266,17 @@ function montarMensagem(p){
     `📅 *Data:* ${new Date(p.criado_em).toLocaleString("pt-BR")}`,
     LINHA,
     "👤 *DADOS DO CLIENTE*",
-    `🙋 Nome: ${p.nome}`,
+    `Nome: ${p.nome}`,
     `📱 Telefone: ${formatarTelefone(p.telefone)}`,
     LINHA,
-    "📦 *ITENS DO PEDIDO*",
+    "*ITENS DO PEDIDO*",
     "",
     ...itens.flatMap(t => [t, ""]).slice(0, -1),
     LINHA,
-    `💰 *TOTAL: ${brl(p.total)}*`,
+    `*TOTAL: ${brl(p.total)}*`,
     LINHA,
-    "✅ Pedido registrado no sistema.",
-    "⏳ Aguardando confirmação! 🙌"
+    "Pedido registrado no sistema.",
+    "Aguardando confirmação!"
   ].join("\n");
 }
 
