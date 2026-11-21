@@ -222,10 +222,11 @@ function mostrarPedidoFeito(feito, dados){
   if (feito){
     document.getElementById("done-code").textContent = dados.codigo;
     document.getElementById("done-instrucao").textContent =
-      "Toque em Enviar pelo WhatsApp: a mensagem é copiada e a conversa da loja abre. Cole a mensagem (Ctrl+V ou toque e segure) e envie.";
+      "Toque em Enviar pelo WhatsApp: a mensagem já abre pronta no chat da loja. É só enviar.";
     ultimaMensagem = montarMensagem(dados);
-    // O texto não vai no link (os emojis chegavam quebrados); ele segue pela área de transferência.
-    document.getElementById("wa-link").href = `https://wa.me/${WHATSAPP_NUMERO}`;
+    // Com só os emojis que a loja exibe certo, o texto pode ir no link e chegar pronto na caixa de mensagem.
+    document.getElementById("wa-link").href =
+      `https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent(ultimaMensagem)}`;
   }
 }
 
@@ -332,8 +333,6 @@ document.getElementById("toast-go").addEventListener("click", abrirCesta);
 document.getElementById("cart-close").addEventListener("click", fecharCesta);
 document.getElementById("done-close").addEventListener("click", fecharCesta);
 document.getElementById("copiar-msg").addEventListener("click", copiarMensagem);
-// Copia a mensagem no mesmo clique que abre a conversa da loja (o link segue normalmente).
-document.getElementById("wa-link").addEventListener("click", () => { copiarMensagem(); });
 sheet.addEventListener("click", ev => { if (ev.target === sheet) fecharCesta(); });
 document.addEventListener("keydown", ev => { if (ev.key === "Escape" && !sheet.hidden) fecharCesta(); });
 
