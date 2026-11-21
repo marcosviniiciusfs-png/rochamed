@@ -306,9 +306,23 @@ document.addEventListener("keydown", ev => { if (ev.key === "Escape" && !sheet.h
 
 // ---- Vitrine ----
 const shelvesEl = document.getElementById("shelves");
+
+// Atalhos para as seções, no topo da vitrine (quebram linha em vez de rolar para o lado).
+const atalhos = document.createElement("nav");
+atalhos.className = "jump";
+atalhos.setAttribute("aria-label", "Ir para uma seção de produtos");
+PRODUCTS.forEach((group, gi) => {
+  const link = document.createElement("a");
+  link.href = `#secao-${gi}`;
+  link.textContent = group.sec;
+  atalhos.appendChild(link);
+});
+shelvesEl.appendChild(atalhos);
+
 PRODUCTS.forEach((group, gi) => {
   const section = document.createElement("section");
   section.className = "shelf";
+  section.id = `secao-${gi}`;
   const title = document.createElement("h2");
   title.textContent = group.sec;
   const cards = document.createElement("div");
