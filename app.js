@@ -222,11 +222,11 @@ function mostrarPedidoFeito(feito, dados){
   if (feito){
     document.getElementById("done-code").textContent = dados.codigo;
     document.getElementById("done-instrucao").textContent =
-      "Toque em Enviar pelo WhatsApp: a mensagem é copiada e a conversa da loja abre. Cole a mensagem (Ctrl+V ou toque e segure) e envie.";
+      "Toque em Enviar pelo WhatsApp: a mensagem já abre pronta no chat da loja. É só enviar.";
     ultimaMensagem = montarMensagem(dados);
-    // O WhatsApp troca todos os emojis por "�" quando o texto vem no link (testado em api.whatsapp.com),
-    // então o texto segue pela área de transferência.
-    document.getElementById("wa-link").href = `https://wa.me/${WHATSAPP_NUMERO}`;
+    // Texto sem emojis chega certo pelo link, então a mensagem já vai preenchida na caixa.
+    document.getElementById("wa-link").href =
+      `https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent(ultimaMensagem)}`;
   }
 }
 
@@ -250,8 +250,8 @@ function formatarTelefone(d){
     : `(${d.slice(0,2)}) ${d.slice(2,6)}-${d.slice(6)}`;
 }
 
-// Só emojis que apareceram corretamente no WhatsApp da loja (🛒 ✨ 🔖 📅 👤 📱).
-// Os demais (números em emoji, 🔢 🏷️ 💰 ✅ ⏳ 🙌) saíam quebrados e foram trocados por texto.
+// Mensagem sem emojis: o WhatsApp troca emojis por "�" quando o texto vem pelo link.
+// Negrito com asteriscos (*texto*), que o WhatsApp formata.
 const LINHA = "━━━━━━━━━━━━━━━━━━";
 
 function montarMensagem(p){
@@ -261,14 +261,14 @@ function montarMensagem(p){
     `    Subtotal: *${brl(i.preco * i.quantidade)}*`
   );
   return [
-    "🛒✨ *NOVO PEDIDO – ROCHAMED* ✨🛒",
+    "*NOVO PEDIDO – ROCHAMED*",
     LINHA,
-    `🔖 *Código do pedido:* ${p.codigo}`,
-    `📅 *Data:* ${new Date(p.criado_em).toLocaleString("pt-BR")}`,
+    `*Código do pedido:* ${p.codigo}`,
+    `*Data:* ${new Date(p.criado_em).toLocaleString("pt-BR")}`,
     LINHA,
-    "👤 *DADOS DO CLIENTE*",
+    "*DADOS DO CLIENTE*",
     `Nome: ${p.nome}`,
-    `📱 Telefone: ${formatarTelefone(p.telefone)}`,
+    `Telefone: ${formatarTelefone(p.telefone)}`,
     LINHA,
     "*ITENS DO PEDIDO*",
     "",
@@ -333,8 +333,6 @@ document.getElementById("toast-go").addEventListener("click", abrirCesta);
 document.getElementById("cart-close").addEventListener("click", fecharCesta);
 document.getElementById("done-close").addEventListener("click", fecharCesta);
 document.getElementById("copiar-msg").addEventListener("click", copiarMensagem);
-// Copia a mensagem no mesmo clique que abre a conversa da loja (o link segue normalmente).
-document.getElementById("wa-link").addEventListener("click", () => { copiarMensagem(); });
 sheet.addEventListener("click", ev => { if (ev.target === sheet) fecharCesta(); });
 document.addEventListener("keydown", ev => { if (ev.key === "Escape" && !sheet.hidden) fecharCesta(); });
 
