@@ -7,10 +7,25 @@
 <meta name="description" content="Rochamed: medicamentos, higiene, beleza e saúde com entrega rápida.">
 <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body class="em-breve">
 <div class="topbar"><span>Black friday Rochamed</span></div>
 
-<header class="header">
+<section class="contagem" id="contagem" aria-labelledby="contagem-titulo">
+  <h1 id="contagem-titulo">A Black Friday Rochamed começa em:</h1>
+  <p class="contagem-sub">Dia 28/11 às 14h (horário de Brasília)</p>
+  <div class="relogio" aria-live="off">
+    <div><b id="c-dias">00</b><span>dias</span></div>
+    <div><b id="c-horas">00</b><span>horas</span></div>
+    <div><b id="c-min">00</b><span>minutos</span></div>
+    <div><b id="c-seg">00</b><span>segundos</span></div>
+  </div>
+  <div class="wrap-btn">
+    <a class="btn-grupo" href="https://chat.whatsapp.com/H23Uze2vTzz5Xfgtd123JM" target="_blank" rel="noopener">Entrar no grupo de ofertas</a>
+    <span class="mao" aria-hidden="true">👆</span>
+  </div>
+</section>
+
+<header class="header loja">
   <a class="logo" href="#" aria-label="Rochamed - página inicial"><img src="assets/logo-blackfriday.png" width="974" height="606" alt="Rochamed Black Friday"></a>
   <form class="search" role="search" onsubmit="return false">
     <input type="search" placeholder="Buscar na Rochamed" aria-label="Buscar">
@@ -24,7 +39,7 @@
   </nav>
 </header>
 
-<nav class="menu" aria-label="Menu principal">
+<nav class="menu loja" aria-label="Menu principal">
   <a class="cats" href="#"><span class="mi"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></span><b>Todas as categorias</b></a>
   <a href="#">Farmácias</a>
   <a href="#">Blog</a>
@@ -35,15 +50,15 @@
   <a class="pill" href="#">Exibir descontos</a>
 </nav>
 
-<main>
+<main class="loja">
   <div id="shelves"></div>
 </main>
 
-<footer class="footer">
+<footer class="footer loja">
   <a class="instagram" href="https://www.instagram.com/farmaciarochamed_/" target="_blank" rel="noopener">@farmaciarochamed_</a>
 </footer>
 
-<button type="button" class="toast" id="toast" hidden>
+<button type="button" class="toast loja" id="toast" hidden>
   <span id="toast-msg">Ver sacola de compra</span>
   <span class="toast-qtd" id="toast-qtd"></span>
 </button>
