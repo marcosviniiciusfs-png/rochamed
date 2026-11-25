@@ -427,3 +427,38 @@ PRODUCTS.forEach((group, gi) => {
 });
 
 atualizarCesta();
+
+// ---- Contagem regressiva até o início da Black Friday ----
+const INICIO_BLACK = new Date("2026-11-28T14:00:00-03:00");
+
+// Tempo restante até o alvo (nunca negativo). "zerou" indica que a contagem chegou ao fim.
+function tempoRestante(alvo, agora = new Date()){
+  const ms = Math.max(0, alvo - agora);
+  const s = Math.floor(ms / 1000);
+  return {
+    dias: Math.floor(s / 86400),
+    horas: Math.floor((s % 86400) / 3600),
+    min: Math.floor((s % 3600) / 60),
+    seg: s % 60,
+    zerou: ms === 0,
+  };
+}
+
+// Atualiza o relógio e, quando zera, mostra a loja. Retorna true quando a contagem terminou.
+function atualizarContagem(){
+  const t = tempoRestante(INICIO_BLACK);
+  if (t.zerou){
+    document.body.classList.remove("em-breve");
+    return true;
+  }
+  const dois = n => String(n).padStart(2, "0");
+  document.getElementById("c-dias").textContent = dois(t.dias);
+  document.getElementById("c-horas").textContent = dois(t.horas);
+  document.getElementById("c-min").textContent = dois(t.min);
+  document.getElementById("c-seg").textContent = dois(t.seg);
+  return false;
+}
+
+if (!atualizarContagem()){
+  const relogio = setInterval(() => { if (atualizarContagem()) clearInterval(relogio); }, 1000);
+}
